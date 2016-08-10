@@ -31,8 +31,11 @@ class ChainedChoicesForm(forms.ModelForm):
                             'field_name': field_name,
                             'parent_value': parent_value
                             }, SERVER_NAME=SERVER_NAME, follow=True)
-                    self.fields[field_name].choices = (
-                        json.loads(article.content))
+                    try:
+                        self.fields[field_name].choices = (
+                            json.loads(article.content))
+                    except ValueError:
+                        self.fields[field_name].choices = (('', '-------'))
         elif 'instance' in kwargs:
             instance = kwargs['instance']
             clie = Client()
@@ -46,7 +49,7 @@ class ChainedChoicesForm(forms.ModelForm):
                     try:
                         field.choices = json.loads(article.content)
                     except ValueError:
-                        field.choices = []
+                        field.choices = [('',"----------")]
         elif len(args) > 0 and type(args[0]) is request.QueryDict:
             instance = args[0]
             clie = Client()
@@ -57,5 +60,8 @@ class ChainedChoicesForm(forms.ModelForm):
                         'field_name': field_name,
                         'parent_value': instance.get(field.parent_field, None)
                     }, SERVER_NAME=SERVER_NAME, follow=True)
-                    field.choices = json.loads(article.content)
+                    try:
+                        field.choices = json.loads(article.content)
+                    except ValueError:
+                        field.choices = [('',"----------")]
 
