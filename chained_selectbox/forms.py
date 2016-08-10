@@ -14,14 +14,10 @@ class ChainedChoicesForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ChainedChoicesForm, self).__init__(*args, **kwargs)
         try:
-            from django.contrib.sites.models import Site
-            SERVER_NAME = Site.objects.get_current().domain
-        except ImportError:
-            try:
-                from django.conf import settings
-                SERVER_NAME = settings.SITE_URL
-            except (ImportError, AttributeError):
-                SERVER_NAME = 'localhost'
+            from django.conf import settings
+            SERVER_NAME = settings.SITE_URL
+        except (ImportError, AttributeError):
+            SERVER_NAME = 'localhost'
         if 'data' in kwargs:
             clie = Client()
             prefix = kwargs['prefix']
