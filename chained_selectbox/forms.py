@@ -34,7 +34,7 @@ class ChainedChoicesForm(forms.ModelForm):
             clie = Client()
 
             for field_name, field in self.fields.items():
-                if hasattr(field, 'parent_field') and hasattr(instance, field_name):
+                if hasattr(field, 'parent_field'):
                     article = clie.get(field.ajax_url, {
                         'field_name': field_name,
                         'parent_value': getattr(instance, field.parent_field)
@@ -45,7 +45,7 @@ class ChainedChoicesForm(forms.ModelForm):
             clie = Client()
 
             for field_name, field in self.fields.items():
-                if hasattr(field, 'parent_field') and hasattr(instance, field_name):
+                if hasattr(field, 'parent_field'):
                     article = clie.get(field.ajax_url, {
                         'field_name': field_name,
                         'parent_value': instance.get(field.parent_field, None)
