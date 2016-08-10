@@ -4,7 +4,15 @@ import json
 
 # This can be used for django internal requests
 from django.test.client import Client
-
+try:
+    from django.contrib.sites.models import Site
+    SERVER_NAME = Site.objects.get_current().domain
+except ImportError:
+    try:
+        from django.conf import settings
+        SERVER_NAME = settings.SITE_URL
+    except (ImportError, AttributeError):
+        SERVER_NAME = 'localhost'
 
 class ChainedChoicesForm(forms.ModelForm):
     """
@@ -26,7 +34,7 @@ class ChainedChoicesForm(forms.ModelForm):
                     article = clie.get(field.ajax_url, {
                             'field_name': field_name,
                             'parent_value': parent_value
-                            })
+                            }, SERVER_NAME=SERVER_NAME)
                     self.fields[field_name].choices = (
                         json.loads(article.content))
         elif 'instance' in kwargs:
@@ -38,7 +46,7 @@ class ChainedChoicesForm(forms.ModelForm):
                     article = clie.get(field.ajax_url, {
                         'field_name': field_name,
                         'parent_value': getattr(instance, field.parent_field)
-                    })
+                    }, SERVER_NAME=SERVER_NAME)
                     try:
                         field.choices = json.loads(article.content)
                     except ValueError:
@@ -52,6 +60,6 @@ class ChainedChoicesForm(forms.ModelForm):
                     article = clie.get(field.ajax_url, {
                         'field_name': field_name,
                         'parent_value': instance.get(field.parent_field, None)
-                    })
+                    }, SERVER_NAME=SERVER_NAME)
                     field.choices = json.loads(article.content)
 
