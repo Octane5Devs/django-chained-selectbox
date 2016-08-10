@@ -35,7 +35,9 @@ class ChainedSelect(Select):
 
     class Media:
         extra = '' if settings.DEBUG else '.min'
-        js = [static('js/chained-select.min.js')]
+        js = [static('admin/js/jquery%s.js' % extra),
+              static('admin/js/jquery.init.js'),
+              static('js/chained-select.min.js')]
 
     def render(self, name, value, attrs={}, choices=()):
         field_prefix = attrs['id'][:attrs['id'].rfind('-') + 1]
