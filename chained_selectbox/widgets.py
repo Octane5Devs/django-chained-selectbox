@@ -35,17 +35,15 @@ class ChainedSelect(Select):
 
     class Media:
         extra = '' if settings.DEBUG else '.min'
-        js = [static('admin/js/jquery%s.js' % extra),
-              static('admin/js/jquery.init.js'),
-              static('js/chained-select.min.js')]
+        js = [static('js/chained-select.min.js')]
 
     def render(self, name, value, attrs={}, choices=()):
         field_prefix = attrs['id'][:attrs['id'].rfind('-') + 1]
 
         if not field_prefix:
-            paretnfield_id = "id_" + self.parent_field
+            parentfield_id = "id_" + self.parent_field
         else:
-            paretnfield_id = field_prefix + self.parent_field
+            parentfield_id = field_prefix + self.parent_field
 
         attrs['ajax_url'] = self.ajax_url
 
@@ -56,7 +54,7 @@ class ChainedSelect(Select):
         //<![CDATA[
         (function($) {
             $(document).ready(function(){
-                var parent_field = $("#%(paretnfield_id)s");
+                var parent_field = $("#%(parentfield_id)s");
                 parent_field.addClass('chained-parent-field');
                 parent_field.attr('chained_id%(item_index)d',
                                   "%(chained_id)s");
@@ -65,7 +63,7 @@ class ChainedSelect(Select):
         //]]>
         </script>
 
-        """ % {"paretnfield_id": paretnfield_id, 'item_index': self.item_index,
+        """ % {"parentfield_id": parentfield_id, 'item_index': self.item_index,
                'chained_id': attrs['id']}
 
         output += js
