@@ -30,7 +30,7 @@ class ChainedChoicesForm(forms.ModelForm):
                     article = clie.get(field.ajax_url, {
                             'field_name': field_name,
                             'parent_value': parent_value
-                            }, SERVER_NAME=SERVER_NAME)
+                            }, SERVER_NAME=SERVER_NAME, follow=True)
                     self.fields[field_name].choices = (
                         json.loads(article.content))
         elif 'instance' in kwargs:
@@ -42,7 +42,7 @@ class ChainedChoicesForm(forms.ModelForm):
                     article = clie.get(field.ajax_url, {
                         'field_name': field_name,
                         'parent_value': getattr(instance, field.parent_field)
-                    }, SERVER_NAME=SERVER_NAME)
+                    }, SERVER_NAME=SERVER_NAME, follow=True)
                     try:
                         field.choices = json.loads(article.content)
                     except ValueError:
@@ -56,6 +56,6 @@ class ChainedChoicesForm(forms.ModelForm):
                     article = clie.get(field.ajax_url, {
                         'field_name': field_name,
                         'parent_value': instance.get(field.parent_field, None)
-                    }, SERVER_NAME=SERVER_NAME)
+                    }, SERVER_NAME=SERVER_NAME, follow=True)
                     field.choices = json.loads(article.content)
 
