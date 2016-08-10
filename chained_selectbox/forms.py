@@ -42,7 +42,7 @@ class ChainedChoicesForm(forms.ModelForm):
                     try:
                         field.choices = json.loads(article.content)
                     except ValueError:
-                        field.choices = ["Value Error"]
+                        field.choices = []
         elif len(args) > 0 and type(args[0]) is request.QueryDict:
             instance = args[0]
             clie = Client()
