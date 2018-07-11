@@ -31,9 +31,15 @@
             }
         };
 
-        $('.chained-parent-field').live('change', function(e) {
-            $(this).loadChainedChoices();
-        });
+        if ($().live) {
+            $('.chained-parent-field').live('change', function(e) {
+                $(this).loadChainedChoices();
+            });
+        } else {
+            $('.chained-parent-field').on('change', function(e) {
+                $(this).loadChainedChoices();
+            });
+        }
     });
 })(django.jQuery);
 
